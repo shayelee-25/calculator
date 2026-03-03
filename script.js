@@ -1,68 +1,119 @@
-const add = function(a, b) {
-    return a + b;
-};
-//console.log(add(2, 3))
-const subtract = function(a, b) {
-    return a - b;
-};
-//console.log(subtract(5, 2))
-const multiply = function(a, b) {
-    return a * b;
-};
-//console.log(multiply(4, 12))
-const divide = function(a, b) {
-    if(b === 0) {
-        return "Error: Cannot divide by zero";
-    } else {
-        return a / b;
-    }
-};
-//console.log(divide(60, 5))
+const buttonValues = [
+    "AC", "+/-", "%", "÷",
+    "7", "8", "9", "*",
+    "4", "5", "6", "-",
+    "1", "2", "3", "+",
+    "0", "00", ".", "="
+];
+const rightSymbols = ["÷", "*", "-", "+", "="];
+const topSymbols = ["AC", "+/-", "%"];
 
-let firstNum = "";
-let operator = "";
-let secondNum = "";
+const display = document.getElementById("display");
+let a = 0;
+let operator = null;
+let b = null;
 
+function add(a, b) {
+    display.value = a + b;
+}
 
-const operate = function() {
-    return `${firstNum} ${operator} ${secondNum}`;
-};
+function subtract(a, b) {
+    display.value = a - b;
+}
 
-const displayTotal = document.querySelector("#.total");
-const addBtn = document.querySelector(".add");
-const subtractBtn = document.querySelector(".subtract");
-const multiplyBtn = document.querySelector(".multiply");
-const divideBtn = document.querySelector(".divide");
-const clearBtn = document.querySelector(".clear");
-const equalBtn = document.querySelector(".equal");
-let inputValue = "";
-displayTotal.appendChild(inputValue);
+function multiply(a, b) {
+    display.value = a * b;
+}
 
-const one = document.querySelector(".1");
-const two = document.querySelector(".2");
-const three = document.querySelector(".3");
-const four = document.querySelector(".4");
-const five = document.querySelector(".5");
-const six = document.querySelector(".6");
-const seven = document.querySelector(".7");
-const eight = document.querySelector(".8");
-const nine = document.querySelector(".9");
-const zero = document.querySelector(".0");
-const zeroZero = document.querySelector(".00");
+function divide(a, b) {
+    display.value = a / b;
+}
 
-const allBtns = document.querySelectorAll("button");
+function clearAll() {
+    a = null;
+    operator = null;
+    b = null; 
+}
 
-function reset(parent) {
-    while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
+function operate(a, operator, b) {
+    switch (operator) {
+        case "+":
+            add(a, b);
+            break;
+        case "-":
+            subtract(a, b);
+            break;
+        case "*":
+            multiply(a, b);
+            break;
+        case "÷":
+            divide(a, b);
+            break;
     }
 }
 
-clearBtn.addEventListener("click", reset());
+for (let i = 0; i < buttonValues.length; i++) {
+    let value = buttonValues[i];
+    let button = document.createElement("button");
+    button.innerText = value;
 
-allBtns.addEventListener("click", () => {
-    displayTotal.appendChild()
-})
+ //process button clicks
+ button.addEventListener("click", function() {
+    if (rightSymbols.includes(value)) {
+        if (value == "=") {
+            if (a != null) {
+                b = display.value;
+
+                if (operator == "÷") {
+                  if (b == "0" || b == "00") {
+                    display.value = "Error";
+                  } else {
+                    operate();
+                  }
+                } else if (operator == "*") {
+                    operate();
+                } else if (operator == "-") {
+                    operate();
+                } else if (operator == "+") {
+                    operate();
+                }
+                clearAll();
+            }
+        } else {
+            operator = value;
+            a = display.value;
+            display.value = "";
+        }
+    } else if (topSymbols.includes(value)) {
+        if (value == "AC") {
+            clearAll();
+            display.value = "";
+        } else if (value == "+/-") {
+            if (display.value != "" && display.value != "0") {
+                if (display.value[0] == "-") {
+                    display.value = display.value.slice(1);
+                } else {
+                    display.value = "-" + display.value;
+                }
+            }
+        } else if (value == "%") {
+            display.value = Number(display.value)/100;
+        }
+    } else {
+        if (value == ".") {
+            if (display.value != "" && !display.value.includes(value)) {
+                display.value += value;
+            }
+        } else if (display.value == "0") {
+            display.value = value;
+        } else {
+            display.value += value;
+        }
+    }
+});
+ //add buttons to calculator
+ document.getElementById("buttons").appendChild(button);
+}
 
 
 
