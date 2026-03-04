@@ -5,6 +5,7 @@ const buttonValues = [
     "1", "2", "3", "+",
     "0", "00", ".", "="
 ];
+
 const rightSymbols = ["÷", "*", "-", "+", "="];
 const topSymbols = ["AC", "+/-", "%"];
 
@@ -14,7 +15,7 @@ let operator = null;
 let b = null;
 
 function add(a, b) {
-    display.value = a + b;
+    display.value = +a + +b;
 }
 
 function subtract(a, b) {
@@ -35,6 +36,7 @@ function clearAll() {
     b = null; 
 }
 
+/*
 function operate(a, operator, b) {
     switch (operator) {
         case "+":
@@ -50,7 +52,7 @@ function operate(a, operator, b) {
             divide(a, b);
             break;
     }
-}
+} */
 
 for (let i = 0; i < buttonValues.length; i++) {
     let value = buttonValues[i];
@@ -64,19 +66,19 @@ for (let i = 0; i < buttonValues.length; i++) {
             if (a != null) {
                 b = display.value;
 
-                if (operator == "÷") {
-                  if (b == "0" || b == "00") {
-                    display.value = "Error";
-                  } else {
-                    operate();
-                  }
-                } else if (operator == "*") {
-                    operate();
-                } else if (operator == "-") {
-                    operate();
-                } else if (operator == "+") {
-                    operate();
+             if (operator == "÷") {
+                if (b == 0 || b == 0o0) {
+                 display.value = "ERROR";
+                } else {
+                 divide(a, b);
                 }
+             } else if (operator == "*") {
+                multiply(a, b);
+             } else if (operator == "-") {
+                subtract(a, b);
+             } else if (operator == "+") {
+                add(a, b);
+             } 
                 clearAll();
             }
         } else {
@@ -89,7 +91,7 @@ for (let i = 0; i < buttonValues.length; i++) {
             clearAll();
             display.value = "";
         } else if (value == "+/-") {
-            if (display.value != "" && display.value != "0") {
+            if (display.value != "" && display.value != 0) {
                 if (display.value[0] == "-") {
                     display.value = display.value.slice(1);
                 } else {
@@ -104,7 +106,7 @@ for (let i = 0; i < buttonValues.length; i++) {
             if (display.value != "" && !display.value.includes(value)) {
                 display.value += value;
             }
-        } else if (display.value == "0") {
+        } else if (display.value == 0) {
             display.value = value;
         } else {
             display.value += value;
